@@ -43,16 +43,12 @@ jobs:
           cd code
           terraform plan -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
                          -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
-                         -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
-
-      # Terraform Destroy
-      # - name: Terraform Destroy
-      #   if: github.ref == 'refs/heads/main'
-      #   run: |
-      #     cd code
-      #     terraform destroy -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
-      #                               -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
-      #                               -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"            
+                         -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}" \
+                         -var "DEV_DIVISION_ID=${{ secrets.DEV_DIVISION_ID }}" \
+                         -var "DEV_WHISPER_PROMPT_ID=${{ secrets.DEV_WHISPER_PROMPT_ID }}" \
+                         -var "DEV_ROUTE_ID=${{ secrets.DEV_ROUTE_ID }}" \
+                         -var "DEV_MEMBER_GROUP_ID=${{ secrets.DEV_MEMBER_GROUP_ID }}" \
+                         -var "DEV_SCRIPT_ID=${{ secrets.DEV_SCRIPT_ID }}"         
 
       # Terraform Apply
       - name: Terraform Apply
@@ -61,4 +57,9 @@ jobs:
           cd code
           terraform apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
                                         -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
-                                        -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
+                                        -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}" \
+                                        -var "DEV_DIVISION_ID=${{ secrets.DEV_DIVISION_ID }}" \
+                                        -var "DEV_WHISPER_PROMPT_ID=${{ secrets.DEV_WHISPER_PROMPT_ID }}" \
+                                        -var "DEV_ROUTE_ID=${{ secrets.DEV_ROUTE_ID }}" \
+                                        -var "DEV_MEMBER_GROUP_ID=${{ secrets.DEV_MEMBER_GROUP_ID }}" \
+                                        -var "DEV_SCRIPT_ID=${{ secrets.DEV_SCRIPT_ID }}" 
