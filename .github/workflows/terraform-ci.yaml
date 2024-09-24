@@ -1,0 +1,64 @@
+name: Terraform Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform Plan and Apply
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout le code du dépôt
+      - name: Checkout Code
+        uses: actions/checkout@v4  # Utilisation de Node.js 20
+
+      # Configurer Terraform avec Node.js 20
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3  # Utilisation de Node.js 20
+        with:
+          terraform_version: 1.9.5
+
+      # Nettoyer les anciens plugins et initialiser Terraform
+      - name: Clean and Initialize Terraform
+        run: |
+          cd code
+          rm -rf .terraform
+          terraform init
+
+      # Sélectionner le workspace 'dev'
+      - name: Select Workspace
+        run: |
+          cd code
+          terraform workspace select dev || terraform workspace new dev
+
+      # Terraform Plan
+      - name: Terraform Plan
+        run: |
+          cd code
+          terraform plan -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+                         -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+                         -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
+
+      # Terraform Destroy
+      # - name: Terraform Destroy
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     cd code
+      #     terraform destroy -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+      #                               -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+      #                               -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"            
+
+      # Terraform Apply
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd code
+          terraform apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+                                        -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+                                        -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
