@@ -55,7 +55,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cd code
-          terraform apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+          terraform destroy -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
                                         -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
                                         -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}" \
                                         -var "DEV_DIVISION_ID=${{ secrets.DEV_DIVISION_ID }}" \
